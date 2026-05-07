@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/data/profile";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const beVietnam = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
@@ -86,7 +87,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${beVietnam.variable} ${cormorant.variable} font-sans bg-[#F5EFE6] min-h-screen`}
       >
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <SmoothScrollProvider>
+          {children}
+          <ScrollToTop />
+        </SmoothScrollProvider>
       </body>
     </html>
   );
