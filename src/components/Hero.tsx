@@ -50,7 +50,7 @@ export function Hero() {
           variants={scaleIn}
           initial="hidden"
           animate="visible"
-          className="relative mb-6 flex items-center justify-center"
+          className="relative mb-10 flex items-center justify-center"
         >
           <div className="absolute w-44 h-44 rounded-full border border-[#8B5E3C]/10" />
           <div className="absolute w-36 h-36 rounded-full border border-[#8B5E3C]/16" />

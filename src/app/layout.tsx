@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Be_Vietnam_Pro, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/data/profile";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 
-const inter = Inter({
+const beVietnam = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-be-vietnam",
 });
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-playfair",
+  variable: "--font-cormorant",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://phamhathu.vn";
@@ -81,7 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="vi">
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans bg-[#F5EFE6] min-h-screen`}
+        className={`${beVietnam.variable} ${cormorant.variable} font-sans bg-[#F5EFE6] min-h-screen`}
       >
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
