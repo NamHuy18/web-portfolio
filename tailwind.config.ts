@@ -15,8 +15,8 @@ const config: Config = {
         "accent-muted": "#EDD9C5",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
-        serif: ["var(--font-playfair)", "Georgia", "serif"],
+        sans: ["var(--font-be-vietnam)", "sans-serif"],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
       },
       boxShadow: {
         soft: "0 4px 24px -2px rgba(139,94,60,0.10)",
