@@ -1,6 +1,6 @@
 # Portfolio Website
 
-Trang web personal brand / link-in-bio tương tự [nguyentrongcong.com](https://www.nguyentrongcong.com/).
+Trang web personal brand / link-in-bio.
 
 ## Tech Stack
 
