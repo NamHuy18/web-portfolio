@@ -4,9 +4,10 @@ import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { type Service } from "@/data/profile";
 
-type ServiceWithImages = Service & { images: string[] };
+type ServiceWithMedia = Service & { images: string[]; videos: string[] };
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -53,24 +54,42 @@ function ServiceImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function ServiceImageSlider({ images, category }: { images: string[]; category: string }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "start",
-    dragFree: false,
-  });
-  const [selectedIndex, setSelectedIndex] = useState(0);
+function ArrowBtn({ dir, onClick, visible }: { dir: "left" | "right"; onClick: () => void; visible: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={dir === "left" ? "Trước" : "Tiếp"}
+      className={`absolute ${dir === "left" ? "left-1" : "right-1"} top-1/2 -translate-y-1/2 z-10
+        w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-md
+        flex items-center justify-center
+        transition-opacity duration-200 ${visible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+    >
+      {dir === "left"
+        ? <ChevronLeft size={15} className="text-[#8B5E3C]" strokeWidth={2.5} />
+        : <ChevronRight size={15} className="text-[#8B5E3C]" strokeWidth={2.5} />}
+    </button>
+  );
+}
 
-  const onSelect = useCallback(() => {
+function ServiceImageSlider({ images, category }: { images: string[]; category: string }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "start" });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const update = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    setCanPrev(emblaApi.canScrollPrev());
+    setCanNext(emblaApi.canScrollNext());
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    emblaApi.on("select", onSelect);
-    return () => { emblaApi.off("select", onSelect); };
-  }, [emblaApi, onSelect]);
+    emblaApi.on("select", update).on("reInit", update);
+    update();
+    return () => { emblaApi.off("select", update).off("reInit", update); };
+  }, [emblaApi, update]);
 
   if (images.length === 1) {
     return <ServiceImage src={images[0]} alt={`${category} 1`} />;
@@ -78,17 +97,20 @@ function ServiceImageSlider({ images, category }: { images: string[]; category: 
 
   return (
     <div className="space-y-3">
-      <div className="overflow-hidden -mx-5 px-5" ref={emblaRef}>
-        <div className="flex gap-2.5">
-          {images.map((img, i) => (
-            <div key={i} className="flex-[0_0_calc(50%-5px)] min-w-0">
-              <ServiceImage src={img} alt={`${category} ${i + 1}`} />
-            </div>
-          ))}
+      <div className="relative">
+        <div className="overflow-hidden -mx-5 px-5" ref={emblaRef}>
+          <div className="flex gap-2.5">
+            {images.map((img, i) => (
+              <div key={i} className="flex-[0_0_calc(50%-5px)] min-w-0">
+                <ServiceImage src={img} alt={`${category} ${i + 1}`} />
+              </div>
+            ))}
+          </div>
         </div>
+        <ArrowBtn dir="left"  onClick={() => emblaApi?.scrollPrev()} visible={canPrev} />
+        <ArrowBtn dir="right" onClick={() => emblaApi?.scrollNext()} visible={canNext} />
       </div>
 
-      {/* Dot indicators — chỉ hiện khi có hơn 2 ảnh */}
       {images.length > 2 && (
         <div className="flex justify-center gap-1.5">
           {images.slice(0, -1).map((_, i) => (
@@ -97,20 +119,126 @@ function ServiceImageSlider({ images, category }: { images: string[]; category: 
               onClick={() => emblaApi?.scrollTo(i)}
               aria-label={`Ảnh ${i + 1}`}
               className={`rounded-full transition-all duration-300 ${
-                i === selectedIndex
-                  ? "w-4 h-1.5 bg-[#C9A279]"
-                  : "w-1.5 h-1.5 bg-[#8B5E3C]/25"
+                i === selectedIndex ? "w-4 h-1.5 bg-[#C9A279]" : "w-1.5 h-1.5 bg-[#8B5E3C]/25"
               }`}
             />
           ))}
         </div>
       )}
-
     </div>
   );
 }
 
-function ServiceCard({ service, index }: { service: ServiceWithImages; index: number }) {
+function getYouTubeId(url: string): string | null {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([^&?/\s]+)/);
+  return m ? m[1] : null;
+}
+
+function getTikTokId(url: string): string | null {
+  const m = url.match(/tiktok\.com\/@[^/]+\/video\/(\d+)/);
+  return m ? m[1] : null;
+}
+
+function VideoPlayer({ src }: { src: string }) {
+  const ytId = getYouTubeId(src);
+  const ttId = getTikTokId(src);
+
+  if (ytId) {
+    return (
+      <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black">
+        <iframe
+          src={`https://www.youtube.com/embed/${ytId}?rel=0&playsinline=1`}
+          className="absolute inset-0 w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  if (ttId) {
+    return (
+      <div className="relative w-full aspect-[9/16] max-h-[420px] rounded-2xl overflow-hidden bg-black">
+        <iframe
+          src={`https://www.tiktok.com/embed/v2/${ttId}`}
+          className="absolute inset-0 w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black">
+      <video
+        src={src}
+        className="absolute inset-0 w-full h-full object-cover"
+        controls
+        playsInline
+        preload="metadata"
+      />
+    </div>
+  );
+}
+
+function VideoSlider({ videos }: { videos: string[] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "center" });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const update = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setCanPrev(emblaApi.canScrollPrev());
+    setCanNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", update).on("reInit", update);
+    update();
+    return () => { emblaApi.off("select", update).off("reInit", update); };
+  }, [emblaApi, update]);
+
+  if (videos.length === 1) {
+    return <VideoPlayer src={videos[0]} />;
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="relative">
+        <div className="overflow-hidden -mx-5 px-5" ref={emblaRef}>
+          <div className="flex gap-3">
+            {videos.map((src, i) => (
+              <div key={i} className="flex-[0_0_100%] min-w-0">
+                <VideoPlayer src={src} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <ArrowBtn dir="left"  onClick={() => emblaApi?.scrollPrev()} visible={canPrev} />
+        <ArrowBtn dir="right" onClick={() => emblaApi?.scrollNext()} visible={canNext} />
+      </div>
+
+      <div className="flex justify-center gap-1.5">
+        {videos.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => emblaApi?.scrollTo(i)}
+            aria-label={`Video ${i + 1}`}
+            className={`rounded-full transition-all duration-300 ${
+              i === selectedIndex ? "w-4 h-1.5 bg-[#C9A279]" : "w-1.5 h-1.5 bg-[#8B5E3C]/25"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({ service, index }: { service: ServiceWithMedia; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
@@ -133,6 +261,18 @@ function ServiceCard({ service, index }: { service: ServiceWithImages; index: nu
         {/* Image slider */}
         <ServiceImageSlider images={service.images} category={service.category} />
 
+        {/* Video section */}
+        {service.videos.length > 0 && (
+          <>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-px bg-[#8B5E3C]/10" />
+              <span className="text-[10px] font-bold text-[#8B5E3C]/50 uppercase tracking-widest">Video thực tế</span>
+              <div className="flex-1 h-px bg-[#8B5E3C]/10" />
+            </div>
+            <VideoSlider videos={service.videos} />
+          </>
+        )}
+
         {/* Zalo CTA */}
         <motion.a
           href={service.zaloUrl}
@@ -154,7 +294,7 @@ function ServiceCard({ service, index }: { service: ServiceWithImages; index: nu
   );
 }
 
-export function ServicesSection({ services }: { services: ServiceWithImages[] }) {
+export function ServicesSection({ services }: { services: ServiceWithMedia[] }) {
   return (
     <section className="px-5 py-8 max-w-md mx-auto w-full">
       {/* Section title */}

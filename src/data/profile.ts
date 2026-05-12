@@ -10,6 +10,7 @@ export type Service = {
   category: string;
   slug: string;
   zaloUrl: string;
+  videoUrls?: string[];
 };
 
 export type FeaturedClip = {
