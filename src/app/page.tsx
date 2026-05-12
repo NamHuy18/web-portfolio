@@ -6,12 +6,13 @@ import { FeaturedVideos } from "@/components/FeaturedVideos";
 import { FeaturedClips } from "@/components/FeaturedClips";
 import { Footer } from "@/components/Footer";
 import { profile } from "@/data/profile";
-import { getServiceImages } from "@/lib/getServiceImages";
+import { getServiceImages, getServiceVideos } from "@/lib/getServiceImages";
 
 export default function Home() {
   const services = profile.services.map((s) => ({
     ...s,
     images: getServiceImages(s.slug),
+    videos: [...getServiceVideos(s.slug), ...(s.videoUrls ?? [])],
   }));
 
   return (

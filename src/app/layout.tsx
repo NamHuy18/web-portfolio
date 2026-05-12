@@ -87,8 +87,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={`${beVietnam.variable} ${cormorant.variable} font-sans bg-[#F5EFE6] min-h-screen relative`}
       >
-        {/* Background image with blur */}
+        {/* Background */}
         <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+          {/* Layer 1: ảnh gốc sắc nét — hiện ở 2 bên */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "url('/bg.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 30%",
+            }}
+          />
+          {/* Layer 2: ảnh blur — chỉ phủ vùng center */}
           <div
             className="absolute inset-0 scale-110"
             style={{
@@ -96,10 +106,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               backgroundSize: "cover",
               backgroundPosition: "center 30%",
               filter: "blur(10px)",
+              maskImage:
+                "linear-gradient(to right, transparent calc(50% - 300px), black calc(50% - 256px), black calc(50% + 256px), transparent calc(50% + 300px))",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent calc(50% - 300px), black calc(50% - 256px), black calc(50% + 256px), transparent calc(50% + 300px))",
             }}
           />
-          {/* Warm overlay — giúp chữ luôn dễ đọc */}
-          <div className="absolute inset-0 bg-[#F5EFE6]/75" />
+          {/* Layer 3: warm overlay center — mask rộng hơn blur để phủ hết vùng transition, không còn dải tối */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "#F5EFE6",
+              opacity: 0.82,
+              maskImage:
+                "linear-gradient(to right, transparent calc(50% - 316px), black calc(50% - 300px), black calc(50% + 300px), transparent calc(50% + 316px))",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent calc(50% - 316px), black calc(50% - 300px), black calc(50% + 300px), transparent calc(50% + 316px))",
+            }}
+          />
+          {/* Layer 4: tint nhẹ 2 bên để hài hòa màu sắc */}
+          <div className="absolute inset-0 bg-[#F5EFE6]/25" />
         </div>
 
         <SmoothScrollProvider>
