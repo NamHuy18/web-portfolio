@@ -105,7 +105,7 @@ export function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          className="w-full space-y-4 text-sm text-gray-600 leading-relaxed"
+          className="w-full space-y-4 text-sm text-gray-600 leading-relaxed bg-[#F5EFE6]/60 backdrop-blur-sm rounded-2xl px-4 py-4"
         >
           <p>{profile.bio}</p>
           <p className="text-gray-700">{profile.bioDetails}</p>
@@ -138,7 +138,7 @@ export function Hero() {
             <ul className="space-y-2">
               {profile.bioSharing.map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-gray-600">
-                  <span className="text-[#8B5E3C]/40 mt-0.5 flex-shrink-0">–</span>
+                  <span className="text-[#8B5E3C]/65 mt-0.5 flex-shrink-0">–</span>
                   <span>{item}</span>
                 </li>
               ))}

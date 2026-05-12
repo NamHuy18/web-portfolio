@@ -8,7 +8,7 @@ export type SocialLink = {
 
 export type Service = {
   category: string;
-  images: string[];
+  slug: string;
   zaloUrl: string;
 };
 
@@ -101,30 +101,10 @@ export const profile: Profile = {
   ],
 
   services: [
-    {
-      category: "NÂNG MŨI",
-      images: ["/services/mui-1.jpg", "/services/mui-2.jpg"],
-      zaloUrl: "https://zalo.me/g/your-group",
-    },
-    {
-      category: "MẮT",
-      images: ["/services/mat-1.jpg", "/services/mat-2.jpg"],
-      zaloUrl: "https://zalo.me/g/your-group",
-    },
-    {
-      category: "NHÂN TRUNG",
-      images: ["/services/nhantung-1.jpg", "/services/nhantung-2.jpg"],
-      zaloUrl: "https://zalo.me/g/your-group",
-    },
-    {
-      category: "HÚT MỠ",
-      images: ["/services/hutmo-1.jpg", "/services/hutmo-2.jpg"],
-      zaloUrl: "https://zalo.me/g/your-group",
-    },
-    {
-      category: "NÂNG NGỰC",
-      images: ["/services/nangnguc-1.jpg", "/services/nangnguc-2.jpg"],
-      zaloUrl: "https://zalo.me/g/your-group",
-    },
+    { category: "NÂNG MŨI",   slug: "mui",      zaloUrl: "https://zalo.me/g/your-group" },
+    { category: "MẮT",         slug: "mat",      zaloUrl: "https://zalo.me/g/your-group" },
+    { category: "NHÂN TRUNG",  slug: "nhantung", zaloUrl: "https://zalo.me/g/your-group" },
+    { category: "HÚT MỠ",     slug: "hutmo",    zaloUrl: "https://zalo.me/g/your-group" },
+    { category: "NÂNG NGỰC",  slug: "nangnguc", zaloUrl: "https://zalo.me/g/your-group" },
   ],
 };

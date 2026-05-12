@@ -85,8 +85,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="vi">
       <body
-        className={`${beVietnam.variable} ${cormorant.variable} font-sans bg-[#F5EFE6] min-h-screen`}
+        className={`${beVietnam.variable} ${cormorant.variable} font-sans bg-[#F5EFE6] min-h-screen relative`}
       >
+        {/* Background image with blur */}
+        <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute inset-0 scale-110"
+            style={{
+              backgroundImage: "url('/bg.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 30%",
+              filter: "blur(10px)",
+            }}
+          />
+          {/* Warm overlay — giúp chữ luôn dễ đọc */}
+          <div className="absolute inset-0 bg-[#F5EFE6]/75" />
+        </div>
+
         <SmoothScrollProvider>
           {children}
           <ScrollToTop />
