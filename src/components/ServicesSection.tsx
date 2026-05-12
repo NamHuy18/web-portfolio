@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { profile, type Service } from "@/data/profile";
+import { type Service } from "@/data/profile";
+
+type ServiceWithImages = Service & { images: string[] };
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -50,7 +53,64 @@ function ServiceImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function ServiceImageSlider({ images, category }: { images: string[]; category: string }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "start",
+    dragFree: false,
+  });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi, onSelect]);
+
+  if (images.length === 1) {
+    return <ServiceImage src={images[0]} alt={`${category} 1`} />;
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="overflow-hidden -mx-5 px-5" ref={emblaRef}>
+        <div className="flex gap-2.5">
+          {images.map((img, i) => (
+            <div key={i} className="flex-[0_0_calc(50%-5px)] min-w-0">
+              <ServiceImage src={img} alt={`${category} ${i + 1}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dot indicators — chỉ hiện khi có hơn 2 ảnh */}
+      {images.length > 2 && (
+        <div className="flex justify-center gap-1.5">
+          {images.slice(0, -1).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => emblaApi?.scrollTo(i)}
+              aria-label={`Ảnh ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${
+                i === selectedIndex
+                  ? "w-4 h-1.5 bg-[#C9A279]"
+                  : "w-1.5 h-1.5 bg-[#8B5E3C]/25"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+function ServiceCard({ service, index }: { service: ServiceWithImages; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
@@ -70,16 +130,8 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
           </span>
         </div>
 
-        {/* Images grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {service.images.map((img, i) => (
-            <ServiceImage
-              key={i}
-              src={img}
-              alt={`${service.category} ${i + 1}`}
-            />
-          ))}
-        </div>
+        {/* Image slider */}
+        <ServiceImageSlider images={service.images} category={service.category} />
 
         {/* Zalo CTA */}
         <motion.a
@@ -102,7 +154,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
   );
 }
 
-export function ServicesSection() {
+export function ServicesSection({ services }: { services: ServiceWithImages[] }) {
   return (
     <section className="px-5 py-8 max-w-md mx-auto w-full">
       {/* Section title */}
@@ -121,13 +173,13 @@ export function ServicesSection() {
           <span className="text-[#C9A279] text-xs">✦</span>
           <div className="h-px w-10 bg-[#8B5E3C]/20" />
         </div>
-        <p className="text-[12px] text-gray-400 mt-2">
+        <p className="text-[12px] text-gray-600 mt-2">
           Ảnh thực tế từ các chị em đã làm cùng Thu
         </p>
       </motion.div>
 
       <div className="space-y-5">
-        {profile.services.map((service, i) => (
+        {services.map((service, i) => (
           <ServiceCard key={service.category} service={service} index={i} />
         ))}
       </div>

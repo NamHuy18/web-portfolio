@@ -111,7 +111,7 @@ export function ConsultationForm() {
             <h2 className="font-serif text-xl font-bold text-gray-900">
               Tư vấn thẩm mỹ & Làm đẹp
             </h2>
-            <p className="text-[13px] text-gray-400 mt-1">
+            <p className="text-[13px] text-gray-600 mt-1">
               Để lại thông tin để Thu đồng hành cùng chị em
             </p>
           </div>
