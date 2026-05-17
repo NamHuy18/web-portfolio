@@ -57,37 +57,37 @@ export const profile: Profile = {
   socialLinks: [
     {
       platform: "TikTok",
-      url: "https://tiktok.com/@yourhandle",
+      url: "https://www.tiktok.com/@phamhathu999?_r=1&_t=ZS-96NlCfffqNA",
       icon: "tiktok",
       color: "#010101",
     },
     {
       platform: "Fanpage",
-      url: "https://facebook.com/yourpage",
+      url: "https://www.facebook.com/share/17M4G8ebTm/?mibextid=wwXIfr",
       icon: "facebook",
       color: "#1877F2",
     },
     {
       platform: "YouTube",
-      url: "https://youtube.com/@yourchannel",
+      url: "https://youtube.com/@pham.ha.thu.official?si=pXuSzPGP7ByskMye",
       icon: "youtube",
       color: "#FF0000",
     },
     {
       platform: "Lemonade",
-      url: "https://lemonade.vn/yourshop",
+      url: "https://s.lemon8-app.com/s/GgjNhRwUfr",
       icon: "lemonade",
       color: "#FF6B35",
     },
     {
       platform: "Group 888 Chuyện",
-      url: "https://facebook.com/groups/your-group",
+      url: "https://www.messenger.com/channel/todaywithphamhathu",
       icon: "facebook",
       color: "#1877F2",
     },
     {
       platform: "Nhóm Zalo Tư Vấn",
-      url: "https://zalo.me/g/your-group",
+      url: "https://zalo.me/g/pekyceypzcoaur8c96b0",
       icon: "zalo",
       color: "#0068FF",
     },
@@ -97,8 +97,9 @@ export const profile: Profile = {
   featuredVideoIds: [],
 
   featuredClips: [
-    { title: "Clip nổi bật 1", url: "https://tiktok.com/@yourhandle/video/..." },
-    { title: "Clip nổi bật 2", url: "https://tiktok.com/@yourhandle/video/..." },
+    { title: "Clip nổi bật 1", url: "https://www.tiktok.com/@phamhathu999/video/7627032949338230024" },
+    { title: "Clip nổi bật 2", url: "https://www.tiktok.com/@phamhathu999/video/7611966441461386516" },
+    { title: "Clip nổi bật 3", url: "https://www.tiktok.com/@phamhathu999/video/7618452632029400327" },
   ],
 
   services: [
