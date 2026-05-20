@@ -278,13 +278,7 @@ function ServiceCard({ service, index }: { service: ServiceWithMedia; index: num
           href={service.zaloUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e) => {
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-              e.preventDefault();
-              window.location.href = "zalo://chat?phone=0902841155";
-            }
-          }}
-          whileHover={{ y: -1.5, scale: 1.01 }}
+whileHover={{ y: -1.5, scale: 1.01 }}
           whileTap={{ scale: 0.97 }}
           className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl min-h-[48px]
                      bg-[#0068FF] text-white text-[13px] font-semibold shadow-sm
