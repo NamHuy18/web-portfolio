@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://phamhathu.vn";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://phamhathu.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

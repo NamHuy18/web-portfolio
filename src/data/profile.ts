@@ -103,10 +103,10 @@ export const profile: Profile = {
   ],
 
   services: [
-    { category: "NÂNG MŨI",   slug: "mui",      zaloUrl: "https://zalo.me/g/your-group" },
-    { category: "MẮT",         slug: "mat",      zaloUrl: "https://zalo.me/g/your-group" },
-    { category: "NHÂN TRUNG",  slug: "nhantung", zaloUrl: "https://zalo.me/g/your-group" },
-    { category: "HÚT MỠ",     slug: "hutmo",    zaloUrl: "https://zalo.me/g/your-group" },
-    { category: "NÂNG NGỰC",  slug: "nangnguc", zaloUrl: "https://zalo.me/g/your-group" },
+    { category: "NÂNG MŨI",   slug: "mui",      zaloUrl: "https://zalo.me/84902841155" },
+    { category: "MẮT",         slug: "mat",      zaloUrl: "https://zalo.me/84902841155" },
+    { category: "NHÂN TRUNG",  slug: "nhantung", zaloUrl: "https://zalo.me/84902841155" },
+    { category: "HÚT MỠ",     slug: "hutmo",    zaloUrl: "https://zalo.me/84902841155" },
+    { category: "NÂNG NGỰC",  slug: "nangnguc", zaloUrl: "https://zalo.me/84902841155" },
   ],
 };
